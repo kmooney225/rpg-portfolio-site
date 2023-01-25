@@ -16,6 +16,13 @@ const Scene = ({draw, height, width}) => {
 
     const context = canvas.current.getContext("2d");
 
+    const offset = {
+      x: -290,
+      y: -180
+    }
+
+    const boundaries = []
+
     const collisionMap = []
     for (let i = 0; i < collision.length; i+=30) {
       collisionMap.push(collision.slice(i, 30 + i))
@@ -41,55 +48,6 @@ const Scene = ({draw, height, width}) => {
         context.fillRect(this.position.x, this.position.y, this.width, this.height)
       }
     }
-
-    const boundaries = []
-    const offset = {
-      x: -290,
-      y: -180
-    }
-
-    collisionMap.forEach((row, i) => {
-      row.forEach((symbol, j) => {
-        if ( symbol === 2372){
-          boundaries.push(new Boundary({
-            position:{
-              x: j * Boundary.width + offset.x,
-              y: i * Boundary.height + offset.y
-            }
-          })
-        )
-      }
-    })
-    })
-
-
-    const musics = []
-
-    musicMap.forEach((row, i) => {
-      row.forEach((symbol, j) => {
-        if ( symbol === 2372){
-          musics.push(new Boundary({
-            position:{
-              x: j * Boundary.width + offset.x,
-              y: i * Boundary.height + offset.y
-            }
-          })
-        )
-      }
-    })
-    })
-
-    console.log(musics)
-
-    const image = new Image();
-    image.src = require("../rooms/PracticeRoom.png");
-
-
-    const foregroundImage = new Image();
-    foregroundImage.src = require("../rooms/ForegroundObjects.png");
-
-    const playerImage = new Image();
-    playerImage.src = require("../rooms/CharacterMove.png");
 
     class Sprite {
       constructor({ position, velocity, image, framesX = {max: 1},  framesY = {max: 1}}) {
@@ -130,36 +88,96 @@ const Scene = ({draw, height, width}) => {
       }
     }
 
+    function rectangularCollsion({rectangle1, rectangle2}) {
+      return(
+         rectangle1.position.x + rectangle1.width >= rectangle2.position.x &&
+         rectangle1.position.x <= rectangle2.position.x + rectangle2.width &&
+         rectangle1.position.y <= rectangle2.position.y + rectangle2.height &&
+         rectangle1.position.y + rectangle1.height >= rectangle2.position.y
+      )
+    }
 
-    const player = new Sprite ({
-      position: {
-        x: width/2,
-        y: height/2- 1312 /28,
-      },
-      image: playerImage,
-      framesX: {
-        max: 6
-      },
-      framesY: {
-        max: 4
-      }
-    })
+    const image = new Image();
+    image.src = require("../rooms/PracticeRoom.png");
+
+    const foregroundImage = new Image();
+    foregroundImage.src = require("../rooms/ForegroundObjects.png");
+
+    const playerImage = new Image();
+    playerImage.src = require("../rooms/CharacterMove.png");
 
     const background = new Sprite({
-        position: {
-          x: offset.x,
-          y: offset.y
-        },
-        image : image
+      position: {
+        x: offset.x,
+        y: offset.y
+      },
+      image : image
+  })
+
+  const foreground = new Sprite({
+      position: {
+        x: offset.x,
+        y: offset.y
+      },
+      image : foregroundImage
+  })
+
+  const player = new Sprite ({
+    position: {
+      x: width/2,
+      y: height/2- 1312 /28,
+    },
+    image: playerImage,
+    framesX: {
+      max: 6
+    },
+    framesY: {
+      max: 4
+    }
+  })
+
+  const testBoundary = new Boundary ({
+    position:{
+      x: 200,
+      y: 200
+    }
+  })
+
+    collisionMap.forEach((row, i) => {
+      row.forEach((symbol, j) => {
+        if ( symbol === 2372){
+          boundaries.push(new Boundary({
+            position:{
+              x: j * Boundary.width + offset.x,
+              y: i * Boundary.height + offset.y
+            }
+          })
+        )
+      }
+    })
     })
 
-    const foreground = new Sprite({
-        position: {
-          x: offset.x,
-          y: offset.y
-        },
-        image : foregroundImage
+    const musics = []
+
+    musicMap.forEach((row, i) => {
+      row.forEach((symbol, j) => {
+        if ( symbol === 2372){
+          musics.push(new Boundary({
+            position:{
+              x: j * Boundary.width + offset.x,
+              y: i * Boundary.height + offset.y
+            }
+          })
+        )
+      }
     })
+    })
+    
+    const musicMenu = {
+      initiated: false
+    }
+
+    const movables = [background, ...boundaries, foreground, ...musics]
 
     const keys = {
       w: {
@@ -183,30 +201,66 @@ const Scene = ({draw, height, width}) => {
       }
     }
 
+    let lastKey = '';
 
-    const testBoundary = new Boundary ({
-      position:{
-        x: 200,
-        y: 200
+    window.addEventListener('keydown', (e) => {
+      switch (e.key) {
+
+        case 'w':
+          keys.w.pressed = true
+          lastKey = 'w'
+          break;
+
+        case 's':
+          keys.s.pressed = true
+          lastKey = 's'
+          break;
+
+        case 'a':
+          keys.a.pressed = true
+          lastKey = 'a'
+          break;
+
+        case 'd':
+          keys.d.pressed = true
+          lastKey = 'd'
+          break;
+
+        case ' ':
+          keys.space.pressed = true
+          lastKey = ' '
+          break;
+
       }
     })
 
-    const movables = [background, ...boundaries, foreground, ...musics]
+    window.addEventListener('keyup', (e) => {
+      switch (e.key) {
 
-    function rectangularCollsion({rectangle1, rectangle2}) {
-      return(
-         rectangle1.position.x + rectangle1.width >= rectangle2.position.x &&
-         rectangle1.position.x <= rectangle2.position.x + rectangle2.width &&
-         rectangle1.position.y <= rectangle2.position.y + rectangle2.height &&
-         rectangle1.position.y + rectangle1.height >= rectangle2.position.y
-      )
-    }
+        case 'w':
+        keys.w.pressed = false
+          break;
 
-    const musicMenu = {
-      initiated: false
+        case 's':
+          keys.s.pressed = false
+          break;
 
-    }
+        case 'd':
+          keys.d.pressed = false
+          break;
 
+        case 'a':
+          keys.a.pressed = false
+          break;
+
+        case ' ':
+          keys.space.pressed = false
+          break;
+      }
+      console.log(e.key);
+    });
+
+    //Game loop-----------------------------------------------------------------------------
     function animate () {
       const animationID = window.requestAnimationFrame(animate);
       background.draw();
@@ -249,7 +303,6 @@ const Scene = ({draw, height, width}) => {
           }
         }
       }
-
 
       let moving = true
 
@@ -358,12 +411,8 @@ const Scene = ({draw, height, width}) => {
       })
     }
   }
-
-
     context.clearRect(0, 0, canvas.width, canvas.height);
-
-
-    }
+  }
 
     function animateMusicMenu () {
       const musicMenuID = window.requestAnimationFrame(animateMusicMenu);
@@ -382,67 +431,6 @@ const Scene = ({draw, height, width}) => {
       }
 
     animate();
-
-
-    let lastKey = '';
-
-    window.addEventListener('keydown', (e) => {
-      switch (e.key) {
-
-        case 'w':
-          keys.w.pressed = true
-          lastKey = 'w'
-          break;
-
-        case 's':
-          keys.s.pressed = true
-          lastKey = 's'
-          break;
-
-        case 'a':
-          keys.a.pressed = true
-          lastKey = 'a'
-          break;
-
-        case 'd':
-          keys.d.pressed = true
-          lastKey = 'd'
-          break;
-
-        case ' ':
-          keys.space.pressed = true
-          lastKey = ' '
-          break;
-
-      }
-    })
-
-    window.addEventListener('keyup', (e) => {
-      switch (e.key) {
-
-        case 'w':
-        keys.w.pressed = false
-          break;
-
-        case 's':
-          keys.s.pressed = false
-          break;
-
-        case 'd':
-          keys.d.pressed = false
-          break;
-
-        case 'a':
-          keys.a.pressed = false
-          break;
-
-        case ' ':
-          keys.space.pressed = false
-          break;
-      }
-      console.log(e.key);
-    });
-
 
   });
 

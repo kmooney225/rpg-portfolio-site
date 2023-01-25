@@ -13,6 +13,11 @@ https://63d1adbe7dae34135eb4da1f--soft-sprite-e8b283.netlify.app/
 - Clone the repository or download a zip file
 - go into the directory and run `npm start`
 
+## Controls
+
+- Use the `WASD` keys to move around
+- Press the `Space` bar near a item to see a menu with details of my work and life
+
 ## Project's Scope
 
 - to reinvent the wheel of a portfolio website by creating an jrpg-like feel to it

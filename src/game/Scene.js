@@ -1,9 +1,9 @@
 import React from 'react';
 import collision from './data/Collision.js'
 import musicData from './data/Music.js'
-import aboutData from './data/About.js'
-import contactData from './data/Contact.js'
-import projectsData from './data/Projects.js'
+// import aboutData from './data/About.js'
+// import contactData from './data/Contact.js'
+// import projectsData from './data/Projects.js'
 import { gsap } from "gsap";
 
 
@@ -136,12 +136,12 @@ const Scene = ({draw, height, width}) => {
     }
   })
 
-  const testBoundary = new Boundary ({
-    position:{
-      x: 200,
-      y: 200
-    }
-  })
+  // const testBoundary = new Boundary ({
+  //   position:{
+  //     x: 200,
+  //     y: 200
+  //   }
+  // })
 
     collisionMap.forEach((row, i) => {
       row.forEach((symbol, j) => {
@@ -205,6 +205,8 @@ const Scene = ({draw, height, width}) => {
 
     window.addEventListener('keydown', (e) => {
       switch (e.key) {
+        default:
+          break;
 
         case 'w':
           keys.w.pressed = true
@@ -236,6 +238,8 @@ const Scene = ({draw, height, width}) => {
 
     window.addEventListener('keyup', (e) => {
       switch (e.key) {
+        default:
+          break;
 
         case 'w':
         keys.w.pressed = false

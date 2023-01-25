@@ -1,5 +1,5 @@
 import './App.css';
-import { gsap } from "gsap";
+// import { gsap } from "gsap";
 import Scene from './game/Scene.js';
 
 function App() {

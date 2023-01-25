@@ -4,6 +4,10 @@ https://user-images.githubusercontent.com/37048222/214691093-effd5cb8-89cc-4002-
 
 A different take on a portfolio website - making a small rpg game displaying my accomplishments and aspirations!
 
+## Current Live Demo
+
+https://63d1adbe7dae34135eb4da1f--soft-sprite-e8b283.netlify.app/
+
 ## How to Run
 
 - Clone the repository or download a zip file

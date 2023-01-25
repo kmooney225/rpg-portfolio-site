@@ -17,8 +17,8 @@ A different take on a portfolio website - making a small rpg game displaying my 
 
 ### Tools
 
-- Tiled: a program for creating 2d scenes 
-- React.js for front end and game loop functions
+- Tiled: a program for creating 2d scenes: https://www.mapeditor.org/
+- React.js for front end and game loop functions (create-react-app): https://create-react-app.dev/
 
 ### To Do
 
